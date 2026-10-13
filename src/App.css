@@ -1,4 +1,13 @@
-.app {
-  overflow-x: hidden;
-  width: 100%;
+#root {
+  width: min(100% - 2rem, 1000px);
+  margin-inline: auto;
+}
+#root,
+.portfolio-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+.portfolio-section {
+  padding-block: 2rem;
 }

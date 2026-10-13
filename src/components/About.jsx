@@ -1,93 +1,22 @@
-import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useGlobalContext } from '../context/GlobalProvider';
 import './About.css';
+import { useGlobalContext } from '../context/GlobalContext';
 
 const About = () => {
-  const { state } = useGlobalContext();
-  const { profile } = state;
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' }
-    }
-  };
+  const { profile } = useGlobalContext();
 
   return (
-    <section className="about" id="about" ref={ref}>
-      <div className="container">
-        <motion.h2
-          className="section-title"
-          variants={itemVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          About Me
-        </motion.h2>
-
-        <motion.div
-          className="about-content"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <motion.p className="about-summary" variants={itemVariants}>
-            {profile.summary}
-          </motion.p>
-
-          <motion.div className="skills-section" variants={itemVariants}>
-            <h3 className="skills-title">Technical Skills</h3>
-            <motion.div
-              className="skills-categories"
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-            >
-              {profile.skills.map((skillGroup, index) => (
-                <motion.div
-                  key={index}
-                  className="skill-category"
-                  variants={itemVariants}
-                >
-                  <h4 className="skill-category-title">{skillGroup.category}</h4>
-                  <div className="skills-grid">
-                    {skillGroup.items.map((skill, skillIndex) => (
-                      <motion.span
-                        key={skillIndex}
-                        className="skill-tag"
-                        whileHover={{
-                          scale: 1.1,
-                          backgroundColor: '#ffde59',
-                          color: '#004aad'
-                        }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                      >
-                        {skill}
-                      </motion.span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </div>
+    <section className="portfolio-section about-section" id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About Me</h2>
+      <p>{profile.summary}</p>
+      <h3>Technical Skills</h3>
+      <dl className="skills">
+        {profile.skills.map((group) => (
+          <div key={group.category}>
+            <dt>{group.category}</dt>
+            <dd>{group.items.join(', ')}</dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 };

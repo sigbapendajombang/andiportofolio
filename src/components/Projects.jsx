@@ -1,341 +1,228 @@
-import React, { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { useGlobalContext } from "../context/GlobalProvider";
-import SolarSystem from "./SolarSystem";
 import "./Projects.css";
+import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useGlobalContext } from "../context/GlobalContext";
 
-const openExternalInNewTab = (event, url) => {
-    event.preventDefault();
-    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
-    if (newWindow) {
-        newWindow.opener = null;
+const CaseStudyImage = ({ project, index }) => {
+  const title = project.imageTitles?.[index] || `Screenshot ${index + 1}`;
+
+  return (
+    <figure
+      className={index === 0 ? "case-study-overview" : "case-study-feature"}
+    >
+      <a
+        href={project.images[index]}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open ${project.title}: ${title} full size`}
+      >
+        <img
+          src={project.images[index]}
+          alt={`${project.title}: ${title}`}
+          loading="lazy"
+        />
+      </a>
+      <figcaption>
+        <h4>{title}</h4>
+        <p>{project.imageDescriptions?.[index]}</p>
+      </figcaption>
+    </figure>
+  );
+};
+
+const ProjectGallery = ({ project }) => (
+  <div className="project-gallery">
+    {project.images.map((image, index) => (
+      <figure key={image}>
+        <a
+          href={image}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${project.title} screenshot ${index + 1} full size`}
+        >
+          <img
+            className="project-image mobile-image"
+            src={image}
+            alt={
+              project.imageTitles?.[index] ||
+              `${project.title} screenshot ${index + 1}`
+            }
+            loading="lazy"
+          />
+        </a>
+        {project.imageTitles?.[index] && (
+          <figcaption>{project.imageTitles[index]}</figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
+);
+
+const Project = ({ project }) => {
+  const [featuresOpen, setFeaturesOpen] = useState(false);
+  const featuresId = useId();
+  const toggleRef = useRef(null);
+  const previewButtonTop = useRef(null);
+
+  useLayoutEffect(() => {
+    if (
+      !featuresOpen &&
+      previewButtonTop.current !== null &&
+      toggleRef.current
+    ) {
+      // Restore the preview's position after the expanded content is removed.
+      const targetTop = Math.max(
+        0,
+        Math.min(
+          previewButtonTop.current,
+          window.innerHeight - toggleRef.current.offsetHeight - 16,
+        ),
+      );
+      window.scrollBy({
+        top: toggleRef.current.getBoundingClientRect().top - targetTop,
+        behavior: "instant",
+      });
+      previewButtonTop.current = null;
     }
-};
+  }, [featuresOpen]);
 
-const MobileProject = ({ project }) => {
-    const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const carouselRef = useRef(null);
-    const cardRef = useRef(null);
-    const itemRefs = useRef([]);
-    const isCardInView = useInView(cardRef, { once: true, amount: 0.3 });
+  const toggleFeatures = () => {
+    if (!featuresOpen) {
+      previewButtonTop.current = toggleRef.current.getBoundingClientRect().top;
+    }
+    setFeaturesOpen((open) => !open);
+  };
 
-    const handleScroll = () => {
-        if (carouselRef.current) {
-            const container = carouselRef.current;
-            const containerCenter = container.scrollLeft + container.clientWidth / 2;
-
-            let closestIndex = 0;
-            let minDistance = Infinity;
-
-            itemRefs.current.forEach((item, index) => {
-                if (item) {
-                    const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-                    const distance = Math.abs(containerCenter - itemCenter);
-
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestIndex = index;
-                    }
+  return (
+    <article className="project">
+      <h3>{project.title}</h3>
+      {project.imageLayout !== "document-and-phones" && (
+        <p>{project.description}</p>
+      )}
+      {project.technologies?.length > 0 && (
+        <p>
+          <strong>Technologies:</strong> {project.technologies.join(", ")}
+        </p>
+      )}
+      {project.storeUrl && (
+        <p>
+          <a href={project.storeUrl} target="_blank" rel="noopener noreferrer">
+            View on Google Play
+          </a>
+        </p>
+      )}
+      {project.imageLayout === "document-and-phones" ? (
+        <div className="barcode-project-layout">
+          <div className="barcode-project-context">
+            <figure>
+              <a
+                href={project.overviewImage}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${project.title} notice full size`}
+              >
+                <img
+                  className="project-overview"
+                  src={project.overviewImage}
+                  alt={project.overviewAlt}
+                  loading="lazy"
+                />
+              </a>
+              <figcaption>{project.overviewCaption}</figcaption>
+            </figure>
+            <p>{project.description}</p>
+          </div>
+          <div className="barcode-project-phones">
+            <ProjectGallery project={project} />
+          </div>
+        </div>
+      ) : project.overviewImage ? (
+        <>
+          <figure>
+            <a
+              href={project.overviewImage}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.title} overview full size`}
+            >
+              <img
+                className="project-overview"
+                src={project.overviewImage}
+                alt={
+                  project.overviewAlt ||
+                  `${project.title} app overview showing multiple phone screens`
                 }
-            });
-
-            if (closestIndex !== activeImageIndex) {
-                setActiveImageIndex(closestIndex);
-            }
-        }
-    };
-
-    return (
-        <motion.article
-            className="project-card mobile-card"
-            ref={cardRef}
-            initial={{ opacity: 0, x: -50 }}
-            animate={isCardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-            <motion.div
-                className="project-content"
-                initial={{ opacity: 0 }}
-                animate={isCardInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-            >
-                <h3 className="project-title">{project.title}</h3>
-
-                <div className="project-tech-stack">
-                    {project.technologies.map((tech, index) => (
-                        <span key={index} className="tech-badge">
-                            {tech}
-                        </span>
-                    ))}
-                </div>
-
-                <div className="description-container">
-                    <p className="project-description dynamic-description fade-in-text" key={activeImageIndex}>
-                        {project.imageDescriptions?.[activeImageIndex] || project.description}
-                    </p>
-                </div>
-
-                {project.storeUrl && (
-                    <div className="project-actions">
-                        <a
-                            className="demo-button"
-                            href={project.storeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(event) => openExternalInNewTab(event, project.storeUrl)}
-                        >
-                            View on Google Play
-                        </a>
-                    </div>
-                )}
-            </motion.div>
-
-            <motion.div
-                className="project-images mobile-layout"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-            >
+                loading="lazy"
+              />
+            </a>
+            {project.overviewCaption && (
+              <figcaption>{project.overviewCaption}</figcaption>
+            )}
+          </figure>
+          {project.imageLayout === "gallery" && (
+            <ProjectGallery project={project} />
+          )}
+        </>
+      ) : project.imageLayout === "gallery" ? (
+        <ProjectGallery project={project} />
+      ) : (
+        project.images.length > 0 && (
+          <div className="project-case-study">
+            <CaseStudyImage project={project} index={0} />
+            {project.images.length > 1 && (
+              <div
+                className={`case-study-disclosure ${featuresOpen ? "is-open" : "is-collapsed"}`}
+              >
                 <div
-                    className="mobile-carousel"
-                    ref={carouselRef}
-                    onScroll={handleScroll}
+                  id={featuresId}
+                  className="case-study-features"
+                  inert={!featuresOpen}
+                  aria-hidden={!featuresOpen}
                 >
-                    {project.images.map((image, index) => (
-                        <div
-                            key={index}
-                            className={`mobile-carousel-item ${index === activeImageIndex ? "active" : ""}`}
-                            ref={(el) => (itemRefs.current[index] = el)}
-                            onClick={() => {
-                                setActiveImageIndex(index);
-                                itemRefs.current[index]?.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "nearest",
-                                    inline: "center",
-                                });
-                            }}
-                        >
-                            <div className="phone-frame">
-                                <div className="phone-notch"></div>
-                                <div className="phone-screen-static">
-                                    <img
-                                        src={image}
-                                        alt={`${project.title} screen ${index + 1}`}
-                                        className="mobile-image"
-                                        loading="lazy"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                  {project.images.slice(1).map((image, index) => (
+                    <CaseStudyImage
+                      key={image}
+                      project={project}
+                      index={index + 1}
+                    />
+                  ))}
                 </div>
-
-                {/* Dot Indicators */}
-                <div className="carousel-dots mobile-dots">
-                    {project.images.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`dot ${index === activeImageIndex ? "active" : ""}`}
-                            onClick={() => {
-                                setActiveImageIndex(index);
-                                itemRefs.current[index]?.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "nearest",
-                                    inline: "center",
-                                });
-                            }}
-                            aria-label={`Go to image ${index + 1}`}
-                        />
-                    ))}
+                <div className="case-study-toggle-row">
+                  <button
+                    ref={toggleRef}
+                    className="case-study-toggle"
+                    type="button"
+                    aria-expanded={featuresOpen}
+                    aria-controls={featuresId}
+                    onClick={toggleFeatures}
+                  >
+                    {featuresOpen ? "Show less" : "More details"}
+                    <span aria-hidden="true"> {featuresOpen ? "-" : "+"}</span>
+                  </button>
                 </div>
-            </motion.div>
-        </motion.article>
-    );
+              </div>
+            )}
+          </div>
+        )
+      )}
+    </article>
+  );
 };
 
+const Projects = () => {
+  const { projects } = useGlobalContext();
 
-const WebmapProject = ({ project }) => {
-    const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const carouselRef = useRef(null);
-    const cardRef = useRef(null);
-    const itemRefs = useRef([]);
-    const isCardInView = useInView(cardRef, { once: true, amount: 0.3 });
-
-    const handleScroll = () => {
-        if (carouselRef.current) {
-            const container = carouselRef.current;
-            const containerCenter = container.scrollLeft + container.clientWidth / 2;
-
-            let closestIndex = 0;
-            let minDistance = Infinity;
-
-            itemRefs.current.forEach((item, index) => {
-                if (item) {
-                    const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-                    const distance = Math.abs(containerCenter - itemCenter);
-
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestIndex = index;
-                    }
-                }
-            });
-
-            if (closestIndex !== activeImageIndex) {
-                setActiveImageIndex(closestIndex);
-            }
-        }
-    };
-
-    return (
-        <motion.article
-            className="project-card webmap-card"
-            ref={cardRef}
-            initial={{ opacity: 0, x: 50 }}
-            animate={isCardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-            <motion.div
-                className="project-content"
-                initial={{ opacity: 0 }}
-                animate={isCardInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-            >
-                <h3 className="project-title">{project.title}</h3>
-
-                <div className="project-tech-stack">
-                    {project.technologies.map((tech, index) => (
-                        <span key={index} className="tech-badge">
-                            {tech}
-                        </span>
-                    ))}
-                </div>
-
-                <div className="description-container">
-                    <p className="project-description dynamic-description fade-in-text" key={activeImageIndex}>
-                        {project.imageDescriptions?.[activeImageIndex] || project.description}
-                    </p>
-                </div>
-
-                {project.storeUrl && (
-                    <div className="project-actions">
-                        <a
-                            className="demo-button"
-                            href={project.storeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(event) => openExternalInNewTab(event, project.storeUrl)}
-                        >
-                            View on Google Play
-                        </a>
-                    </div>
-                )}
-            </motion.div>
-
-            <motion.div
-                className="project-images webmap-layout"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-            >
-                <div
-                    className="webmap-carousel"
-                    ref={carouselRef}
-                    onScroll={handleScroll}
-                >
-                    {project.images.map((image, index) => (
-                        <div
-                            key={index}
-                            className={`webmap-carousel-item ${index === activeImageIndex ? "active" : ""}`}
-                            ref={(el) => (itemRefs.current[index] = el)}
-                            onClick={() => {
-                                setActiveImageIndex(index);
-                                itemRefs.current[index]?.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "nearest",
-                                    inline: "center",
-                                });
-                            }}
-                        >
-                            <div className="browser-frame">
-                                <div className="browser-header">
-                                    <div className="browser-dots">
-                                        <span className="dot-btn red"></span>
-                                        <span className="dot-btn yellow"></span>
-                                        <span className="dot-btn green"></span>
-                                    </div>
-                                    <div className="browser-url-bar">
-                                        <span className="url-text">{project.title}</span>
-                                    </div>
-                                </div>
-                                <div className="browser-screen">
-                                    <img
-                                        src={image}
-                                        alt={`${project.title} screen ${index + 1}`}
-                                        className="webmap-image"
-                                        loading="lazy"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Dot Indicators */}
-                {project.images.length > 1 && (
-                    <div className="carousel-dots webmap-dots">
-                        {project.images.map((_, index) => (
-                            <button
-                                key={index}
-                                className={`dot ${index === activeImageIndex ? "active" : ""}`}
-                                onClick={() => {
-                                    setActiveImageIndex(index);
-                                    itemRefs.current[index]?.scrollIntoView({
-                                        behavior: "smooth",
-                                        block: "nearest",
-                                        inline: "center",
-                                    });
-                                }}
-                                aria-label={`Go to image ${index + 1}`}
-                            />
-                        ))}
-                    </div>
-                )}
-            </motion.div>
-        </motion.article>
-    );
-};
-
-const Projects = ({ isReady = true }) => {
-    const { projects } = useGlobalContext();
-    const sectionRef = useRef(null);
-    const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-
-    return (
-        <section className="section projects-section" id="projects" ref={sectionRef}>
-            {/* Fixed Solar System Background */}
-            <SolarSystem isReady={isReady} />
-
-            <div className="container">
-                <motion.h2
-                    className="section-title"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-                    transition={{ duration: 1.2, ease: 'easeOut' }}
-                >
-                    Featured Projects
-                </motion.h2>
-
-                <div className="projects-list">
-                    {projects.map((project) => {
-                        const ProjectComponent = project.category === "mobile" ? MobileProject : WebmapProject;
-
-                        return <ProjectComponent key={project.id} project={project} />;
-                    })}
-                </div>
-            </div>
-        </section>
-    );
+  return (
+    <section
+      className="portfolio-section projects-section"
+      id="projects"
+      aria-labelledby="projects-title"
+    >
+      <h2 id="projects-title">Featured Projects</h2>
+      {projects.map((project) => (
+        <Project key={project.id} project={project} />
+      ))}
+    </section>
+  );
 };
 
 export default Projects;

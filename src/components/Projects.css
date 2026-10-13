@@ -1,677 +1,173 @@
-/* Project Section Snap Scrolling - Handled globally now */
-
-/* Projects Section - Container for Solar System Background */
 .projects-section {
-    position: relative;
-    overflow: hidden;
+  padding: 0;
 }
 
-/* Ensure content sits above the fixed solar system */
-.projects-section .container {
-    position: relative;
-    z-index: 2;
+.project {
+  min-width: 0;
+  padding: clamp(12px, 2.5vw, 24px);
+  background: var(--color-ketiga);
+  color: var(--color-font);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--box-shadow);
 }
 
-/* Force vertical stacking for all project cards */
-.webmap-card,
-.mobile-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 4rem;
-    min-height: 100vh;
-    position: relative;
-    z-index: 2;
+.project > h3 {
+  margin-top: 0;
 }
 
-/* Project Content - No background boundaries */
-.project-content {
-    padding: 4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: rgba(0, 25, 49, 0.3);
-    box-shadow: 2px 2px 2px 2px var(--primary-yellow);;
-    backdrop-filter: blur(8px);
-    position: relative;
-    z-index: 2;
-    border-radius: 16px;
-    /* Soften edges */
+.project + .project {
+  margin-top: var(--project-gap);
 }
 
-.project-tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.tech-badge {
-    background: rgba(255, 222, 89, 0.15);
-    color: var(--primary-yellow);
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-box-shadow: 1px 1px 1px 1px var(--primary-yellow);;
-    transition: all 0.3s ease;
-}
-
-.tech-badge:hover {
-    background: rgba(255, 222, 89, 0.25);
-    border-color: var(--primary-yellow);
-    transform: translateY(-3px);
-}
-
-/* Project Images - now proportional and stacked */
-/* Project Images - now proportional and stacked */
-.project-images {
-    width: 100%;
-    padding: 2rem;
-    background: transparent;
-    /* Removed black background */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    /* NO overflow:hidden - this prevents carousel scrolling */
-}
-
-/* Netflix-Style Carousel */
-.netflix-carousel {
-    display: flex;
-    overflow-x: hidden;
-    /* Disabled scrolling - users must use arrows/keyboard */
-    gap: 2rem;
-    width: 100%;
-    padding: 4rem 2rem 2rem 2rem;
-    /* Extra padding for scale effect */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    /* Hide scrollbar for cleaner look */
-    scroll-behavior: smooth;
-    /* Fast scrolling - no animation delay */
-}
-
-.netflix-carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.carousel-item {
-    flex: 0 0 auto;
-    width: 70%;
-    /* Smaller base width */
-    height: 50vh;
-    /* Smaller base height */
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(0.85);
-    /* Non-active items are smaller */
-    opacity: 0.6;
-    /* Non-active items are dimmed */
-}
-
-/* Active/Center item - larger and fully visible */
-.carousel-item.active {
-    transform: scale(1.1);
-    opacity: 1;
-    z-index: 2;
-}
-
-.project-image-carousel {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Or contain, depending on preference. Cover looks more 'Netflix' */
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-
-/* Make images proportional (never stretched) */
-.project-image-landscape {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    object-fit: contain;
-    transition: all 0.5s ease;
-}
-
-/* Remove grid entirely */
-.images-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-}
-
-/* Hover Effect Kept */
-.image-wrapper,
-.single-image-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: 0;
-    /* Sharp corners for retro look */
-    background: #001931;
-    /* Dark blue */
-    cursor: pointer;
-    transition: all 0.4s ease;
-    border: 4px solid #fff;
-    /* Retro border */
-    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5);
-}
-
-.image-wrapper:hover,
-.single-image-wrapper:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0px var(--primary-yellow);
-}
-
-/* Responsive remains simple */
-@media (max-width: 768px) {
-    .project-content {
-        padding: 1.5rem;
-    }
-
-    .project-images {
-        padding: 1rem;
-    }
-
-    .carousel-item {
-        width: 90%;
-        height: 40vh;
-        /* Smaller on mobile */
-    }
-}
-
-/* Mobile Phone Frame - Horizontal Carousel */
-.mobile-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 2rem;
-    width: 100%;
-    min-height: 900px;
-}
-
-.mobile-carousel {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: visible;
-    gap: 8rem;
-    width: 100%;
-    padding: 1rem calc(50% - 150px);
-    /* Center first/last items properly */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-}
-
-.mobile-carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.mobile-carousel-item {
-    flex: 0 0 auto;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    transform: translate3d(0, 0, 0) scale(0.85);
-    opacity: 0.6;
-    min-width: fit-content;
-    scroll-snap-align: center;
-    /* GPU Acceleration */
-    will-change: transform, opacity;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    touch-action: pan-x;
-}
-
-.mobile-carousel-item.active {
-    transform: translate3d(0, 0, 0) scale(1.05);
-    opacity: 1;
-    z-index: 2;
-}
-
-.phone-frame {
-    position: relative;
-    width: 120px;
-    height: 570px;
-    background: #1a1a1a;
-    border-radius: 40px;
-    padding: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    border: 3px solid #333;
-    overflow: visible;
-}
-
-.phone-notch {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 20px;
-    background: #1c1c1e;
-    border-radius: 0 0 20px 20px;
-    z-index: 10;
-}
-
-.phone-screen-static {
-    width: 100%;
-    height: 100%;
-    background: #000;
-    border-radius: 32px;
-    overflow: visible;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.project-image {
+  width: 100%;
+  max-height: 540px;
+  object-fit: contain;
 }
 
 .mobile-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    object-fit: cover;
+  width: auto;
+  max-height: 440px;
+  margin-inline: auto;
 }
 
-/* Responsive mobile carousel - Larger screens */
-@media (min-width: 1024px) {
-    .mobile-layout {
-        min-height: 950px;
-    }
-
-    .phone-frame {
-        width: 300px;
-        height: 640px;
-    }
-
-    .mobile-carousel {
-        padding: rem calc(5% - 10px);
-        gap: 2rem;
-    }
+.project-overview {
+  width: 100%;
+  height: auto;
 }
 
-/* Responsive mobile carousel - Medium screens */
-@media (max-width: 1023px) and (min-width: 769px) {
-    .mobile-layout {
-        min-height: 900px;
-    }
-
-    .phone-frame {
-        width: 300px;
-        height: 640px;
-    }
-
-    .mobile-carousel {
-        padding: 2rem calc(50% - 170px);
-        gap: 7rem;
-    }
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 1.5rem;
 }
 
-/* Responsive mobile carousel - Tablets */
-@media (max-width: 768px) {
-    .mobile-layout {
-        min-height: 750px;
-    }
-
-    .phone-frame {
-        width: 300px;
-        height: 640px;
-    }
-
-    .mobile-carousel {
-        padding: 2rem calc(50% - 150px);
-        gap: 6rem;
-    }
+.project-gallery figure {
+  min-width: 0;
 }
 
-/* Responsive mobile carousel - Small phones */
-@media (max-width: 480px) {
-    .mobile-layout {
-        min-height: 650px;
-    }
-
-    .phone-frame {
-        width: 300px;
-        height: 640px;
-    }
-
-    .phone-notch {
-        width: 100px;
-        height: 16px;
-    }
-
-    .mobile-carousel {
-        padding: 2rem calc(50% - 130px);
-        gap: 6rem;
-    }
+.barcode-project-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-/* Description Container for Dynamic Text */
-.description-container {
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    margin: 1rem 0;
+.barcode-project-layout figure {
+  margin: 0;
 }
 
-.dynamic-description {
-    animation: fadeIn 0.5s ease-in-out;
+.barcode-project-phones .project-gallery {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  align-items: start;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.barcode-project-phones .mobile-image {
+  width: 100%;
+  max-height: none;
+  margin: 0;
 }
 
-/* Scroll Indicator Text */
-.scroll-indicator-text {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #ffde59;
-    opacity: 0.7;
-    font-style: italic;
+.barcode-project-phones figcaption {
+  padding-inline: 0.5rem;
+  font-size: 0.875rem;
 }
 
-/* Carousel Dot Indicators */
-.carousel-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    padding: 1rem 0;
+@media (max-width: 700px) {
+  .barcode-project-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-.carousel-dots .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 222, 89, 0.3);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 0;
+.image-hint {
+  color: var(--color-muted);
+  font-size: 0.875rem;
 }
 
-.carousel-dots .dot:hover {
-    background: rgba(255, 222, 89, 0.6);
-    transform: scale(1.2);
+.project-case-study img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
 }
 
-.carousel-dots .dot.active {
-    background: #ffde59;
-    width: 12px;
-    height: 12px;
-    box-shadow: 0 0 10px rgba(255, 222, 89, 0.5);
+.project-case-study h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.4;
 }
 
-/* Mobile Project Dots - Now clickable */
-.carousel-dots.mobile-dots {
-    margin-top: 1.5rem;
+.project-case-study figcaption p {
+  margin: 0;
 }
 
-.carousel-dots.mobile-dots .dot {
-    cursor: pointer;
-    pointer-events: auto;
+.case-study-overview {
+  margin-bottom: 2rem;
 }
 
-/* Webmap Layout - Browser-style Carousel */
-.webmap-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem;
-    width: 100%;
+.case-study-disclosure {
+  position: relative;
 }
 
-.webmap-carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 2rem;
-    width: 100%;
-    padding: 2rem calc(50% - 175px);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
+.is-collapsed .case-study-features {
+  height: clamp(140px, 18vw, 180px);
+  overflow: hidden;
 }
 
-.webmap-carousel::-webkit-scrollbar {
-    display: none;
+.is-collapsed .case-study-feature {
+  align-items: start;
 }
 
-.webmap-carousel-item {
-    flex: 0 0 auto;
-    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
-    transform: translate3d(0, 0, 0) scale(0.85);
-    opacity: 0.5;
-    min-width: fit-content;
-    cursor: pointer;
-    scroll-snap-align: center;
-    /* GPU Acceleration */
-    will-change: transform, opacity;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    touch-action: pan-x;
+.is-collapsed .case-study-feature ~ .case-study-feature {
+  display: none;
 }
 
-.webmap-carousel-item.active {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 1;
-    z-index: 2;
+.case-study-toggle-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-block: 1rem;
 }
 
-/* Browser Frame for Webmap */
-.webmap-carousel-item .browser-frame {
-    width: 1000px;
-    max-width: 70vw;
-    background: #1a1a1a;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    border: 2px solid #333;
+.is-collapsed .case-study-toggle-row::before {
+  content: "";
+  position: absolute;
+  inset: -70px 0 100%;
+  background: linear-gradient(to bottom, transparent, var(--color-ketiga));
+  pointer-events: none;
 }
 
-.browser-header {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background: #2d2d2d;
-    gap: 12px;
+.case-study-toggle {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-utama);
+  border-radius: 4px;
+  background: var(--color-ketiga);
+  color: var(--color-utama);
+  font-weight: bold;
 }
 
-.browser-dots {
-    display: flex;
-    gap: 8px;
+.case-study-toggle:hover {
+  background: var(--color-surface-hover);
 }
 
-.browser-dots .dot-btn {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+.case-study-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--color-border);
 }
 
-.browser-dots .dot-btn.red {
-    background: #ff5f57;
+.case-study-feature figcaption {
+  margin: 0;
 }
 
-.browser-dots .dot-btn.yellow {
-    background: #febc2e;
-}
-
-.browser-dots .dot-btn.green {
-    background: #28c840;
-}
-
-.browser-url-bar {
-    flex: 1;
-    background: #1a1a1a;
-    padding: 6px 12px;
-    border-radius: 6px;
-}
-
-.browser-url-bar .url-text {
-    color: #888;
-    font-size: 0.85rem;
-}
-
-.browser-screen {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: #000;
-}
-
-.webmap-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Webmap Dots */
-.carousel-dots.webmap-dots {
-    margin-top: 1.5rem;
-}
-
-/* Responsive webmap carousel */
-@media (min-width: 1024px) {
-    .webmap-carousel {
-        padding: 2rem calc(50% - 200px);
-    }
-
-    .webmap-carousel-item .browser-frame {
-        width: 1060px;
-    }
-}
-
-@media (max-width: 768px) {
-    .webmap-carousel {
-        padding: 2rem calc(50% - 160px);
-        gap: 1.5rem;
-    }
-
-    .webmap-carousel-item .browser-frame {
-        width: 450px;
-        max-width: 75vw;
-    }
-}
-
-@media (max-width: 480px) {
-    .webmap-carousel {
-        padding: 2rem calc(50% - 120px);
-        gap: 1rem;
-    }
-
-    .webmap-carousel-item .browser-frame {
-        width: 340px;
-        max-width: 80vw;
-    }
-
-    .browser-header {
-        padding: 6px 10px;
-    }
-
-    .browser-dots .dot-btn {
-        width: 8px;
-        height: 8px;
-    }
-}
-
-/* Project Actions - Demo Button */
-.project-actions {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
+@media (max-width: 700px) {
+  .case-study-feature {
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-}
-
-.demo-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 32px;
-    background: linear-gradient(135deg, var(--primary-yellow, #ffde59) 0%, #ffc107 100%);
-    color: #001931;
-    font-weight: 700;
-    font-size: 1rem;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 222, 89, 0.3);
-}
-
-.demo-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 222, 89, 0.5);
-}
-
-.demo-button:active {
-    transform: translateY(-1px);
-}
-
-/* Carousel Navigation Arrows */
-.carousel-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.carousel-arrow {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 222, 89, 0.15);
-    border: 2px solid rgba(255, 222, 89, 0.4);
-    color: #ffde59;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    transition: all 0.2s ease-out;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-}
-
-.carousel-arrow:hover {
-    background: rgba(255, 222, 89, 0.25);
-    border-color: rgba(255, 222, 89, 0.6);
-}
-
-.carousel-arrow:active {
-    transform: scale(0.92);
-    background: rgba(255, 222, 89, 0.35);
-}
-
-.carousel-arrow:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.carousel-arrow:disabled:active {
-    transform: none;
-}
-
-@media (max-width: 480px) {
-    .carousel-arrow {
-        width: 44px;
-        height: 44px;
-        font-size: 1.25rem;
-    }
+  }
 }

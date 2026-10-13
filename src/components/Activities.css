@@ -1,327 +1,39 @@
-/* Activities Section */
 .activities-section {
-    min-height: 100vh;
-    background: transparent;
-    padding: var(--space-3xl) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.activities-subtitle {
-    text-align: center;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: rgba(255, 222, 89, 0.8);
-    margin-bottom: var(--space-2xl);
-    font-family: 'Roboto Mono', monospace;
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 1.5rem;
 }
 
-/* Instagram-Style Highlights */
-.activities-scroll-container {
-    display: flex;
-    overflow-x: auto;
-    gap: var(--space-2xl);
-    padding: var(--space-md) var(--space-lg);
-    margin-top: var(--space-xl);
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    justify-content: center;
-    /* Center items if they don't overflow */
+.activity-image-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
-.activities-scroll-container::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari, Opera */
+.activity-image-button img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
-/* Highlight Item */
-.activity-highlight {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    width: 210px;
-    flex-shrink: 0;
+.activity-dialog {
+  width: min(800px, calc(100% - 2rem));
+  max-height: 90vh;
+  padding: 1.25rem;
+  border: 1px solid var(--color-dialog-border);
+  background: var(--color-ketiga);
+  box-shadow: var(--box-shadow);
+  color: inherit;
 }
 
-.highlight-frame-wrapper {
-    width: 180px;
-    height: 315px;
-    border-radius: 18px;
-    padding: 4px;
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: var(--space-xs);
-    transition: transform 0.3s ease;
-}
+.activity-dialog::backdrop { background: var(--color-backdrop); }
 
-.activity-highlight:hover .highlight-frame-wrapper {
-    transform: scale(1.05);
-}
+.activity-dialog form { text-align: right; }
 
-.highlight-frame {
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-    border: 3px solid #000;
-    overflow: hidden;
-    background: #000;
-}
-
-.highlight-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.highlight-caption {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.9rem;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    margin-top: 8px;
-}
-
-/* Lightbox Modal */
-.lightbox-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.356);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: var(--space-lg);
-    animation: fadeIn 0.3s ease;
-}
-
-.lightbox-content {
-    position: relative;
-    max-width: 1000px;
-    /* Constrain width */
-    width: auto;
-    /* Allow shrinking */
-    max-height: 90vh;
-    /* Prevent overflowing viewport */
-    overflow-y: auto;
-    /* Enable scrolling if content is tall */
-    background: rgba(0, 74, 173, 0.9);
-    /* More opaque background for readability */
-    backdrop-filter: blur(20px);
-    border: 2px solid var(--primary-yellow);
-    border-radius: var(--radius-xl);
-    padding: var(--space-lg);
-    animation: scaleIn 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.lightbox-close {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
-    background: var(--primary-yellow);
-    color: var(--primary-blue);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.25rem;
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-
-.lightbox-close:hover {
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 0 20px rgba(255, 222, 89, 0.5);
-}
-
-.lightbox-image-wrapper {
-    width: auto;
-    max-width: 100%;
-    max-height: 70vh;
-    /* Limit image height to leave room for text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: var(--space-lg);
-    background: transparent;
-    /* Remove black background */
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    padding: 0;
-    /* Remove padding */
-}
-
-.lightbox-image {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 70vh;
-    object-fit: contain;
-}
-
-.lightbox-details {
-    text-align: center;
-}
-
-.lightbox-caption {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.125rem;
-    color: #fff;
-    margin-bottom: var(--space-sm);
-    line-height: 1.6;
-}
-
-.lightbox-date {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1rem;
-    color: var(--primary-yellow);
-    margin-bottom: var(--space-md);
-}
-
-.lightbox-tags {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-}
-
-.lightbox-tag {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--primary-yellow);
-    background: rgba(255, 222, 89, 0.15);
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 222, 89, 0.3);
-}
-
-/* Instagram Button */
-.instagram-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: var(--space-lg);
-    padding: 14px 32px;
-    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-    color: #fff;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.75rem;
-    text-decoration: none;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 8px 20px rgba(131, 58, 180, 0.4);
-}
-
-.instagram-button:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(131, 58, 180, 0.6);
-    border-color: rgba(255, 255, 255, 0.6);
-}
-
-.instagram-button:active {
-    transform: translateY(-2px) scale(1.02);
-}
-
-.instagram-button i {
-    font-size: 1.2rem;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .activities-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: var(--space-md);
-    }
-}
-
-@media (max-width: 768px) {
-    .activities-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: var(--space-sm);
-    }
-
-    .lightbox-content {
-        padding: var(--space-sm);
-        /* Reduced padding */
-    }
-
-    .lightbox-image-wrapper {
-        max-height: 80vh;
-    }
-
-    .activities-scroll-container {
-        gap: var(--space-lg);
-    }
-
-    .activity-highlight {
-        width: 180px;
-    }
-
-    .highlight-frame-wrapper {
-        width: 150px;
-        height: 262px;
-    }
-
-    .highlight-caption {
-        font-size: 0.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .activities-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .lightbox-overlay {
-        padding: var(--space-sm);
-    }
-
-    .activity-highlight {
-        width: 150px;
-    }
-
-    .highlight-frame-wrapper {
-        width: 126px;
-        height: 220px;
-    }
-}
+.activity-dialog img { max-height: 60vh; margin-inline: auto; object-fit: contain; }

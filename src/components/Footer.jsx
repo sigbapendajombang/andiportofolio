@@ -1,11 +1,12 @@
+import './Footer.css';
 import React from "react";
-import { useGlobalContext } from "../context/GlobalProvider";
+import { useGlobalContext } from "../context/GlobalContext";
 
 const Footer = () => {
     const { profile } = useGlobalContext();
 
     return (
-        <footer className="footer">
+        <footer className="portfolio-section footer contact-section footer-section" id="contact">
             <div className="container">
                 <div className="footer-content">
                     <h2>Let's Work Together</h2>
