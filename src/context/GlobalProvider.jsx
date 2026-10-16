@@ -42,13 +42,26 @@ export const GlobalProvider = ({ children }) => {
         "I'm a Full-stack GIS Developer with over 3 years of professional experience builds powerful web-based mapping solutions. I specialize in transforming big geospatial data into fast, interactive map applicationsp. My expertise includes handling large-scale datasets, performing complex server-side spatial queries, and architecting modern web GIS applications using the modern JavaScript frameworks and backend technologies. I create mapping solutions that are not just functional, but scalable, performant, and built to last.",
       skills: [
         {
-          category: "Frontend Development",
-          items: ["React", "React Native", "Ionic JS"],
+          category: "Frontend & Mobile",
+          items: ["React", "React Native", "Ionic", "Vite"],
         },
-        { category: "Backend Development", items: ["Node.js", "Laravel"] },
-        { category: "Geospatial Database", items: ["PostGIS", "PostgreSQL"] },
-        { category: "GIS Tools", items: ["ArcGIS", "QGIS"] },
-        { category: "DevOps", items: ["Docker", "Redis", "Git"] },
+        {
+          category: "Backend & APIs",
+          items: ["Node.js", "Express", "Laravel", "FrankenPHP"],
+        },
+        {
+          category: "Web Mapping & GIS",
+          items: ["PostGIS", "GeoServer", "Leaflet", "Mapbox GL JS", "Turf.js"],
+        },
+        {
+          category: "Data & Cloud",
+          items: ["PostgreSQL", "Redis", "Firebase"],
+        },
+        {
+          category: "GIS & Analysis Tools",
+          items: ["QGIS", "ArcGIS", "Google Earth Engine"],
+        },
+        { category: "Delivery", items: ["Docker", "Git", "GitHub"] },
       ],
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
@@ -64,8 +77,9 @@ export const GlobalProvider = ({ children }) => {
         id: 1,
         title: "SI GIT",
         category: "webmap",
+        liveUrl: "https://pbb-bapenda.jombangkab.go.id/sigit_dev/login",
         description:
-          "A comprehensive web-based GIS platform for managing spatial data related to tax records. It integrates PostGIS for spatial processing and provides real-time geospatial analysis tools.",
+          "A web mapping platform that brings property boundaries and tax records together. Village users can explore tax data, edit spatial features, and check properties with the context of a map.",
         technologies: [
           "React",
           "Laravel",
@@ -105,7 +119,7 @@ export const GlobalProvider = ({ children }) => {
         storeUrl:
           "https://play.google.com/store/apps/details?id=com.makelar.app",
         description:
-          "A comprehensive real estate mobile application for property listings, spatial analysis, and agent management. This project is currently in progress and features interactive property catalogs, point-of-view (POV) imagery for property visualization, and advanced spatial analysis tools to help agents and buyers make informed decisions.",
+          "A property application I’m developing to help agents and buyers explore listings in their geographic context. It combines a property catalog, panoramic imagery, and location analysis in one mobile experience. Development is ongoing.",
         technologies: ["Ionic", "Firebase", "Gemini", "Node.js", "React"],
         images: [a3Login, a3Property, a3Pov, a3Analysis, a3Catalog],
         imageDescriptions: [
@@ -121,6 +135,8 @@ export const GlobalProvider = ({ children }) => {
         title: "E-SPOS PKB",
         category: "mobile",
         overviewImage: esposOverview,
+        storeUrl:
+          "https://play.google.com/store/apps/details?id=id.go.kabjombang.bapenda.espos&hl=en",
         description:
           "A field application for the validation and verification of PKB (Motor Vehicle Tax) data. This app enables officers to track vehicles in real time, supported by PBB-P2 parcel data to simplify and accelerate field surveys.",
         technologies: ["Ionic", "React", "Redis", "Node.js", "Docker"],
@@ -147,6 +163,8 @@ export const GlobalProvider = ({ children }) => {
         id: 5,
         title: "Barcode SPPT",
         category: "mobile",
+        liveUrl: "https://pbb-bapenda.jombangkab.go.id/petaSppt/",
+        liveLinkLabel: "Open Barcode SPPT map",
         imageLayout: "document-and-phones",
         technologies: [
           "React",

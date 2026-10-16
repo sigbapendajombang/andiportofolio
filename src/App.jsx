@@ -10,8 +10,8 @@ function App() {
     <>
       <Header />
       <main className="portfolio-main">
-        <About />
         <Projects />
+        <About />
         <Activities />
       </main>
       <Footer />

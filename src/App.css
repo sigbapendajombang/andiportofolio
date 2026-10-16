@@ -1,6 +1,7 @@
-#root {
-  width: min(100% - 2rem, 1000px);
+﻿#root {
+  width: min(100% - 3rem, 1120px);
   margin-inline: auto;
+  padding-block: 28px;
 }
 #root,
 .portfolio-main {
@@ -9,5 +10,12 @@
   gap: var(--section-gap);
 }
 .portfolio-section {
-  padding-block: 2rem;
+  min-width: 0;
+  padding: 0;
+}
+@media (max-width: 600px) {
+  #root {
+    width: calc(100% - 2.5rem);
+    padding-top: 20px;
+  }
 }

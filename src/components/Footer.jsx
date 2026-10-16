@@ -9,9 +9,10 @@ const Footer = () => {
         <footer className="portfolio-section footer contact-section footer-section" id="contact">
             <div className="container">
                 <div className="footer-content">
-                    <h2>Let's Work Together</h2>
+                    <p className="eyebrow">Get in touch</p>
+                    <h2>Have a mapping problem<br />in mind?</h2>
                     <p>
-                        Have a project in mind? Let's build something amazing together.
+                        Tell me what you’re working on. I’d be happy to talk through it.
                     </p>
 
                     <div className="footer-links">
@@ -21,7 +22,7 @@ const Footer = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Email
+                            {profile.contact.email}
                         </a>
                         <a
                             href={profile.contact.linkedin}
@@ -51,7 +52,7 @@ const Footer = () => {
 
                     <div className="copyright">
                         <p>
-                            © {new Date().getFullYear()} {profile.name}. Built with React
+                            © {new Date().getFullYear()} {profile.name} · Kediri, Indonesia
                         </p>
                     </div>
                 </div>

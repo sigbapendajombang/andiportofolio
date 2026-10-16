@@ -1,4 +1,5 @@
 import "./Projects.css";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import { useGlobalContext } from "../context/GlobalContext";
 
@@ -57,7 +58,7 @@ const ProjectGallery = ({ project }) => (
   </div>
 );
 
-const Project = ({ project }) => {
+const Project = ({ project, number }) => {
   const [featuresOpen, setFeaturesOpen] = useState(false);
   const featuresId = useId();
   const toggleRef = useRef(null);
@@ -94,12 +95,15 @@ const Project = ({ project }) => {
 
   return (
     <article className="project">
-      <h3>{project.title}</h3>
+      <div className="project-heading"><p className="eyebrow">{number} / {project.category === 'webmap' ? 'Web GIS' : 'Mobile & field applications'}</p>
+      <h3>{project.title}</h3></div>
+      {project.id === 1 && <p className="project-standfirst">Connecting tax records with the map.</p>}
+      {project.id === 1 && <p className="project-fact">Serving 306 village users across Jombang</p>}
       {project.imageLayout !== "document-and-phones" && (
         <p>{project.description}</p>
       )}
       {project.technologies?.length > 0 && (
-        <p>
+        <p className="project-technologies">
           <strong>Technologies:</strong> {project.technologies.join(", ")}
         </p>
       )}
@@ -107,6 +111,13 @@ const Project = ({ project }) => {
         <p>
           <a href={project.storeUrl} target="_blank" rel="noopener noreferrer">
             View on Google Play
+          </a>
+        </p>
+      )}
+      {project.liveUrl && (
+        <p>
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+            {project.liveLinkLabel || "Open live app"}
           </a>
         </p>
       )}
@@ -196,7 +207,21 @@ const Project = ({ project }) => {
                     onClick={toggleFeatures}
                   >
                     {featuresOpen ? "Show less" : "More details"}
-                    <span aria-hidden="true"> {featuresOpen ? "-" : "+"}</span>
+                    <svg
+                      className="case-study-chevron"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -217,10 +242,17 @@ const Projects = () => {
       id="projects"
       aria-labelledby="projects-title"
     >
-      <h2 id="projects-title">Featured Projects</h2>
-      {projects.map((project) => (
-        <Project key={project.id} project={project} />
+      <div className="section-heading work-heading"><div><p className="eyebrow">Projects & practice</p><h2 id="projects-title">Selected work</h2></div><p>Mapping systems and applications<br />built around real workflows.</p></div>
+      {projects.slice(0, 3).map((project, index) => (
+        <Project key={project.id} project={project} number={`0${index + 1}`} />
       ))}
+      <div className="other-work"><h3>More work</h3><p>Further applications for field surveys and public access to tax information.</p>
+      {projects.slice(3).map((project, index) => (
+        <details className="additional-project" key={project.id}>
+          <summary><span>{project.title}</span><span className="details-label">Explore project <svg className="details-chevron" viewBox={`0 0 ${faChevronDown.icon[0]} ${faChevronDown.icon[1]}`} fill="currentColor" aria-hidden="true" focusable="false"><path d={faChevronDown.icon[4]} /></svg></span></summary>
+          <Project project={project} number={`0${index + 4}`} />
+        </details>
+      ))}</div>
     </section>
   );
 };
